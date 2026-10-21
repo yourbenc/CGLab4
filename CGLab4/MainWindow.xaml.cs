@@ -100,6 +100,121 @@ namespace CGLab4
             }
         }
 
+        private void BtnRotatePoint_Click(object sender, RoutedEventArgs e)
+        {
+            if (_manager.SelectedPolygon == null)
+            {
+                MessageBox.Show(
+                    "Сначала выберите полигон!",
+                    "Внимание");
+                return;
+            }
+
+            if (double.TryParse(TxtRotationAngle.Text, out double angle) &&
+                double.TryParse(TxtRotationX.Text, out double x) &&
+                double.TryParse(TxtRotationY.Text, out double y))
+            {
+                Point rotationPoint = new Point(x, y);
+
+                _manager.SelectedPolygon.ApplyRotation(
+                    angle,
+                    rotationPoint);
+
+                _manager.Render(DrawingCanvas);
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Введите корректные значения угла и координат точки.",
+                    "Ошибка ввода");
+            }
+        }
+
+        private void BtnRotateCenter_Click(object sender, RoutedEventArgs e)
+        {
+            if (_manager.SelectedPolygon == null)
+            {
+                MessageBox.Show(
+                    "Сначала выберите полигон!",
+                    "Внимание");
+                return;
+            }
+
+            if (double.TryParse(TxtRotationAngle.Text, out double angle))
+            {
+                _manager.SelectedPolygon.ApplyRotationAroundCenter(angle);
+
+                _manager.Render(DrawingCanvas);
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Введите корректное значение угла.",
+                    "Ошибка ввода");
+            }
+        }
+
+        private void BtnScalePoint_Click(object sender, RoutedEventArgs e)
+        {
+            if (_manager.SelectedPolygon == null)
+            {
+                MessageBox.Show(
+                    "Сначала выберите полигон!",
+                    "Внимание");
+
+                return;
+            }
+
+            if (double.TryParse(TxtScaleX.Text, out double scaleX) &&
+                double.TryParse(TxtScaleY.Text, out double scaleY) &&
+                double.TryParse(TxtScalePointX.Text, out double x) &&
+                double.TryParse(TxtScalePointY.Text, out double y))
+            {
+                Point scalePoint = new Point(x, y);
+
+                _manager.SelectedPolygon.ApplyScale(
+                    scaleX,
+                    scaleY,
+                    scalePoint);
+
+                _manager.Render(DrawingCanvas);
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Введите корректные коэффициенты и координаты точки.",
+                    "Ошибка ввода");
+            }
+        }
+
+        private void BtnScaleCenter_Click(object sender, RoutedEventArgs e)
+        {
+            if (_manager.SelectedPolygon == null)
+            {
+                MessageBox.Show(
+                    "Сначала выберите полигон!",
+                    "Внимание");
+
+                return;
+            }
+
+            if (double.TryParse(TxtScaleX.Text, out double scaleX) &&
+                double.TryParse(TxtScaleY.Text, out double scaleY))
+            {
+                _manager.SelectedPolygon.ApplyScaleAroundCenter(
+                    scaleX,
+                    scaleY);
+
+                _manager.Render(DrawingCanvas);
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Введите корректные коэффициенты масштабирования.",
+                    "Ошибка ввода");
+            }
+        }
+
         private void UpdateStatus()
         {
             if (_manager.IsDrawingMode)

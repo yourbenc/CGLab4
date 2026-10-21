@@ -1,45 +1,238 @@
 ﻿<Window x:Class="CGLab4.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Лабораторная работа: Полигоны" Height="500" Width="900">
+        Title="Лабораторная работа: Полигоны"
+        Height="650"
+        Width="1000">
+
     <Grid>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="260"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Панель управления -->
-        <StackPanel Grid.Column="0" Margin="10" Background="LightGray">
-            <TextBlock Text="Управление" FontWeight="Bold" Margin="0,0,0,10"/>
+        <ScrollViewer Grid.Column="0"
+                      VerticalScrollBarVisibility="Auto">
 
-            <Button Content="Новый полигон" Click="BtnNewPolygon_Click" Margin="0,5" Padding="5"/>
-            <Button Content="Завершить полигон" Click="BtnFinishPolygon_Click" Margin="0,5" Padding="5"/>
-            <Button Content="Очистить сцену" Click="BtnClearScene_Click" Margin="0,5" Padding="5" Background="MistyRose"/>
+            <StackPanel Margin="10"
+                        Background="LightGray">
 
-            <Separator Margin="0,15"/>
-            <TextBlock Text="Режим выбора" FontWeight="Bold"/>
-            <CheckBox x:Name="ChkSelectionMode" Content="Включить выбор полигона" Margin="0,5"/>
-            <TextBlock Text="(Кликните по полигону на поле)" FontSize="10" Foreground="Gray"/>
+                <TextBlock Text="Управление"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
 
-            <Separator Margin="0,15"/>
-            <TextBlock Text="Смещение (dx, dy):" FontWeight="Bold"/>
-            <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="dx:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <TextBox x:Name="TxtDx" Width="60" Text="50" Margin="0,0,10,0"/>
-                <TextBlock Text="dy:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <TextBox x:Name="TxtDy" Width="60" Text="50"/>
+                <Button Content="Новый полигон"
+                        Click="BtnNewPolygon_Click"
+                        Margin="0,5"
+                        Padding="5"/>
+
+                <Button Content="Завершить полигон"
+                        Click="BtnFinishPolygon_Click"
+                        Margin="0,5"
+                        Padding="5"/>
+
+                <Button Content="Очистить сцену"
+                        Click="BtnClearScene_Click"
+                        Margin="0,5"
+                        Padding="5"
+                        Background="MistyRose"/>
+
+                <!-- Выбор полигона -->
+
+                <Separator Margin="0,15"/>
+
+                <TextBlock Text="Режим выбора"
+                           FontWeight="Bold"/>
+
+                <CheckBox x:Name="ChkSelectionMode"
+                          Content="Включить выбор полигона"
+                          Margin="0,5"/>
+
+                <TextBlock Text="(Кликните по полигону на поле)"
+                           FontSize="10"
+                           Foreground="Gray"/>
+
+                <!-- Смещение -->
+
+                <Separator Margin="0,15"/>
+
+                <TextBlock Text="Смещение (dx, dy):"
+                           FontWeight="Bold"/>
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,5">
+
+                    <TextBlock Text="dx:"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+
+                    <TextBox x:Name="TxtDx"
+                             Width="60"
+                             Text="50"
+                             Margin="0,0,10,0"/>
+
+                    <TextBlock Text="dy:"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+
+                    <TextBox x:Name="TxtDy"
+                             Width="60"
+                             Text="50"/>
+
+                </StackPanel>
+
+                <Button Content="Сместить выбранный"
+                        Click="BtnTranslate_Click"
+                        Margin="0,5"
+                        Padding="5"
+                        Background="LightGreen"/>
+
+                <!-- Поворот -->
+
+                <Separator Margin="0,15"/>
+
+                <TextBlock Text="Поворот:"
+                           FontWeight="Bold"/>
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,5">
+
+                    <TextBlock Text="Угол:"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+
+                    <TextBox x:Name="TxtRotationAngle"
+                             Width="70"
+                             Text="45"/>
+
+                </StackPanel>
+
+                <TextBlock Text="Точка вращения:"
+                           Margin="0,5,0,0"/>
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,5">
+
+                    <TextBlock Text="X:"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+
+                    <TextBox x:Name="TxtRotationX"
+                             Width="55"
+                             Text="300"
+                             Margin="0,0,10,0"/>
+
+                    <TextBlock Text="Y:"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+
+                    <TextBox x:Name="TxtRotationY"
+                             Width="55"
+                             Text="200"/>
+
+                </StackPanel>
+
+                <Button Content="Повернуть вокруг точки"
+                        Click="BtnRotatePoint_Click"
+                        Margin="0,5"
+                        Padding="5"/>
+
+                <Button Content="Повернуть вокруг центра"
+                        Click="BtnRotateCenter_Click"
+                        Margin="0,5"
+                        Padding="5"/>
+
+                <!-- Масштабирование -->
+
+                <Separator Margin="0,15"/>
+
+                <TextBlock Text="Масштабирование:"
+                           FontWeight="Bold"/>
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,5">
+
+                    <TextBlock Text="Sx:"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+
+                    <TextBox x:Name="TxtScaleX"
+                             Width="55"
+                             Text="1.5"
+                             Margin="0,0,10,0"/>
+
+                    <TextBlock Text="Sy:"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+
+                    <TextBox x:Name="TxtScaleY"
+                             Width="55"
+                             Text="1.5"/>
+
+                </StackPanel>
+
+                <TextBlock Text="Точка масштабирования:"
+                           Margin="0,5,0,0"/>
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,5">
+
+                    <TextBlock Text="X:"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+
+                    <TextBox x:Name="TxtScalePointX"
+                             Width="55"
+                             Text="300"
+                             Margin="0,0,10,0"/>
+
+                    <TextBlock Text="Y:"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+
+                    <TextBox x:Name="TxtScalePointY"
+                             Width="55"
+                             Text="200"/>
+
+                </StackPanel>
+
+                <Button Content="Масштабировать относительно точки"
+                        Click="BtnScalePoint_Click"
+                        Margin="0,5"
+                        Padding="5"/>
+
+                <Button Content="Масштабировать относительно центра"
+                        Click="BtnScaleCenter_Click"
+                        Margin="0,5"
+                        Padding="5"/>
+
+                <!-- Статус -->
+
+                <Separator Margin="0,15"/>
+
+                <TextBlock Text="Статус:"
+                           FontWeight="Bold"/>
+
+                <TextBlock x:Name="StatusText"
+                           Text="Ожидание..."
+                           TextWrapping="Wrap"
+                           Foreground="DarkBlue"
+                           Margin="0,5"/>
+
             </StackPanel>
-            <Button Content="Сместить выбранный" Click="BtnTranslate_Click" Margin="0,5" Padding="5" Background="LightGreen"/>
 
-            <Separator Margin="0,15"/>
-            <TextBlock Text="Статус:" FontWeight="Bold"/>
-            <TextBlock x:Name="StatusText" Text="Ожидание..." TextWrapping="Wrap" Foreground="DarkBlue" Margin="0,5"/>
-        </StackPanel>
+        </ScrollViewer>
 
         <!-- Область рисования -->
-        <Canvas Grid.Column="1" x:Name="DrawingCanvas" Background="White" 
+
+        <Canvas Grid.Column="1"
+                x:Name="DrawingCanvas"
+                Background="White"
                 MouseLeftButtonDown="Canvas_MouseLeftButtonDown"
                 MouseMove="Canvas_MouseMove">
         </Canvas>
+
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace CGLab4.Models
 {
@@ -47,5 +48,29 @@ namespace CGLab4.Models
 
             return new Point(x / w, y / w);
         }
+
+        public static Matrix3x3 CreateRotation(double angleDegrees)
+        {
+            double angleRadians = angleDegrees * Math.PI / 180.0;
+
+            double cos = Math.Cos(angleRadians);
+            double sin = Math.Sin(angleRadians);
+
+            return new Matrix3x3(
+                cos, -sin, 0,
+                sin, cos, 0,
+                0, 0, 1
+            );
+        }
+
+        public static Matrix3x3 CreateScale(double scaleX, double scaleY)
+        {
+            return new Matrix3x3(
+                scaleX, 0, 0,
+                0, scaleY, 0,
+                0, 0, 1
+            );
+        }
+
     }
 }

@@ -79,6 +79,86 @@ namespace CGLab4.Models
         }
 
         // TODO (Участник 2): Добавить сюда методы ApplyRotation, ApplyScale с использованием матриц 3x3
+
+        public void ApplyRotation(double angleDegrees, Point rotationPoint)
+        {
+            // 1. Переносим точку вращения в начало координат
+            Matrix3x3 moveToOrigin = new Matrix3x3(
+                1, 0, -rotationPoint.X,
+                0, 1, -rotationPoint.Y,
+                0, 0, 1
+            );
+
+            // 2. Создаём матрицу поворота
+            Matrix3x3 rotation = Matrix3x3.CreateRotation(angleDegrees);
+
+            // 3. Возвращаем объект обратно
+            Matrix3x3 moveBack = new Matrix3x3(
+                1, 0, rotationPoint.X,
+                0, 1, rotationPoint.Y,
+                0, 0, 1
+            );
+
+            // Объединяем три преобразования в одну матрицу
+            Matrix3x3 result = Matrix3x3.Multiply(
+                moveBack,
+                Matrix3x3.Multiply(rotation, moveToOrigin)
+            );
+
+            // Применяем итоговую матрицу ко всем вершинам полигона
+            ApplyTransformation(result);
+        }
+
+        public void ApplyRotationAroundCenter(double angleDegrees)
+        {
+            // Получаем центр самого полигона
+            Point center = Center;
+
+            // Используем уже готовый метод поворота вокруг заданной точки
+            ApplyRotation(angleDegrees, center);
+        }
+
+
+        public void ApplyScale(double scaleX, double scaleY, Point scalePoint)
+        {
+            // 1. Переносим точку масштабирования в начало координат
+            Matrix3x3 moveToOrigin = new Matrix3x3(
+                1, 0, -scalePoint.X,
+                0, 1, -scalePoint.Y,
+                0, 0, 1
+            );
+
+            // 2. Создаём матрицу масштабирования
+            Matrix3x3 scale = Matrix3x3.CreateScale(scaleX, scaleY);
+
+            // 3. Возвращаем объект обратно
+            Matrix3x3 moveBack = new Matrix3x3(
+                1, 0, scalePoint.X,
+                0, 1, scalePoint.Y,
+                0, 0, 1
+            );
+
+            // Объединяем три преобразования в одну матрицу
+            Matrix3x3 result = Matrix3x3.Multiply(
+                moveBack,
+                Matrix3x3.Multiply(scale, moveToOrigin)
+            );
+
+            // Применяем итоговую матрицу ко всем вершинам
+            ApplyTransformation(result);
+        }
+
+
+
+        public void ApplyScaleAroundCenter(double scaleX, double scaleY)
+        {
+            // Получаем центр полигона
+            Point center = Center;
+
+            // Используем уже готовое масштабирование
+            // относительно произвольной точки
+            ApplyScale(scaleX, scaleY, center);
+        }
         // TODO (Участник 3): Добавить сюда или в расширения методы CheckPointInside, GetEdgeIntersection
     }
 }
