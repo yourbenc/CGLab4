@@ -48,11 +48,56 @@
 
                 <CheckBox x:Name="ChkSelectionMode"
                           Content="Включить выбор полигона"
-                          Margin="0,5"/>
+                          Margin="0,5"
+                          Checked="ChkSelectionMode_Checked"
+                          Unchecked="ChkSelectionMode_Unchecked"/>
 
                 <TextBlock Text="(Кликните по полигону на поле)"
                            FontSize="10"
                            Foreground="Gray"/>
+
+                <Separator Margin="0,15"/>
+
+                <TextBlock Text="Геометрические проверки"
+                           FontWeight="Bold"/>
+
+                <Button Content="Пересечение двух рёбер"
+                        Click="BtnIntersectionMode_Click"
+                        Margin="0,5"
+                        Padding="5"/>
+
+                <Button Content="Точка внутри полигона"
+                        Click="BtnPointContainmentMode_Click"
+                        Margin="0,5"
+                        Padding="5"/>
+
+                <Button Content="Точка справа или слева от ребра"
+                        Click="BtnEdgeSideMode_Click"
+                        Margin="0,5"
+                        Padding="5"/>
+
+                <Button Content="Задать новое ребро"
+                        Click="BtnNewSideEdge_Click"
+                        Margin="0,5"
+                        Padding="5"/>
+
+                <Button Content="Завершить проверку"
+                        Click="BtnStopAnalysisMode_Click"
+                        Margin="0,5"
+                        Padding="5"/>
+
+                <TextBlock Text="Для проверки точки сначала выберите полигон. Пересечение: по две точки на каждое ребро, второе ребро видно при движении мыши. Сторона: две точки задают ребро, последующие клики проверяют точки."
+                           TextWrapping="Wrap"
+                           FontSize="10"
+                           Foreground="Gray"
+                           Margin="0,4"/>
+
+                <TextBox x:Name="AnalysisResultsText"
+                         IsReadOnly="True"
+                         TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto"
+                         Height="110"
+                         Margin="0,5"/>
 
                 <!-- Смещение -->
 
@@ -233,6 +278,12 @@
                 MouseLeftButtonDown="Canvas_MouseLeftButtonDown"
                 MouseMove="Canvas_MouseMove">
         </Canvas>
+
+        <!-- Проверки рисуют только сюда и не перерисовывают полигоны. -->
+        <Canvas Grid.Column="1"
+                x:Name="InteractionOverlay"
+                Background="Transparent"
+                IsHitTestVisible="False"/>
 
     </Grid>
 </Window>

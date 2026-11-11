@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,9 +8,9 @@ namespace CGLab4.Models
     public class PolygonManager
     {
         public List<LabPolygon> Polygons { get; private set; } = new List<LabPolygon>();
-        public LabPolygon SelectedPolygon { get; private set; }
+        public LabPolygon? SelectedPolygon { get; private set; }
 
-        private LabPolygon _currentPolygon;
+        private LabPolygon? _currentPolygon;
         private bool _isDrawingMode;
 
         public bool IsDrawingMode => _isDrawingMode;
@@ -48,30 +48,61 @@ namespace CGLab4.Models
             SelectedPolygon = null;
         }
 
-        /// <summary>
-        /// Выбор полигона по точке клика.
-        /// TODO (Участник 3): Заменить проверку Bounding Box на точный алгоритм "Point in Polygon"
-        /// </summary>
+        /// <summary>Выбор фигуры по фактическому контуру или близости к точке/отрезку.</summary>
         public void SelectPolygon(Point p)
         {
             DeselectAll();
 
-            foreach (var poly in Polygons)
+            for (int i = Polygons.Count - 1; i >= 0; i--)
             {
-                if (poly.Vertices.Count == 0) continue;
-
-                double minX = poly.Vertices.Min(v => v.X);
-                double maxX = poly.Vertices.Max(v => v.X);
-                double minY = poly.Vertices.Min(v => v.Y);
-                double maxY = poly.Vertices.Max(v => v.Y);
-
-                if (p.X >= minX - 5 && p.X <= maxX + 5 && p.Y >= minY - 5 && p.Y <= maxY + 5)
+                LabPolygon poly = Polygons[i];
+                if (IsHit(poly, p))
                 {
                     SelectedPolygon = poly;
                     poly.IsSelected = true;
-                    break; // Выбираем первый попавшийся (верхний)
+                    break;
                 }
             }
+        }
+
+        private static bool IsHit(LabPolygon polygon, Point point)
+        {
+            const double tolerance = 5;
+            IReadOnlyList<Point> vertices = polygon.Vertices;
+
+            if (vertices.Count == 0)
+            {
+                return false;
+            }
+
+            if (vertices.Count >= 3)
+            {
+                return Geometry2D.ClassifyPointInPolygon(vertices, point) != PointPolygonLocation.Outside;
+            }
+
+            if (vertices.Count == 1)
+            {
+                return DistanceSquared(point, vertices[0]) <= tolerance * tolerance;
+            }
+
+            Point start = vertices[0];
+            Point end = vertices[1];
+            double dx = end.X - start.X;
+            double dy = end.Y - start.Y;
+            double lengthSquared = dx * dx + dy * dy;
+            double t = lengthSquared == 0
+                ? 0
+                : ((point.X - start.X) * dx + (point.Y - start.Y) * dy) / lengthSquared;
+            t = Math.Max(0, Math.Min(1, t));
+            Point closest = new Point(start.X + t * dx, start.Y + t * dy);
+            return DistanceSquared(point, closest) <= tolerance * tolerance;
+        }
+
+        private static double DistanceSquared(Point a, Point b)
+        {
+            double dx = a.X - b.X;
+            double dy = a.Y - b.Y;
+            return dx * dx + dy * dy;
         }
 
         private void DeselectAll()
